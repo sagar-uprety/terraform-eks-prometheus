@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp
+  labels:
+    app: nodeapp
+spec:
+  selector:
+    matchLabels:
+      app: nodeapp
+  template:
+    metadata:
+      labels:
+        app: nodeapp
+    spec:
+      imagePullSecrets:
+      - name: docker-hub-key
+      containers:
+      - name: nodeapp
+        image: 977977/node-prometheus
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeapp
+  labels:
+    app: nodeapp
+spec:
+  type: ClusterIP
+  selector:
+    app: nodeapp
+  ports:
+  - name: service
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
+---
